@@ -32,5 +32,5 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 }
 
 async fn handler(_: Request<hyper::body::Incoming>) -> Result<Response<Full<Bytes>>, hyper::Error> {
-    Ok(Response::new(Full::new(Bytes::from("OK"))))
+    Ok(Response::new(Full::new(Bytes::new())))
 }

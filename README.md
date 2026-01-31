@@ -6,7 +6,7 @@ A minimal web server built with Rust and Hyper that returns `200 OK` on all endp
 
 - **Minimal Footprint**: Built on `hyper` (v1) for raw performance and low overhead.
 - **Microservice Ready**: Configurable via environment variables.
-- **Observability**: Structured logging with `tracing`.
+- **Dockerized**: Optimized Alpine-based image (~12MB).
 
 ## Configuration
 
@@ -49,22 +49,20 @@ A minimal web server built with Rust and Hyper that returns `200 OK` on all endp
    docker run -d -p 3000:3000 -e PORT=3000 always-ok
    ```
 
-## Running from GHCR
+## Running from GitHub Container Registry (GHCR)
 
 The Docker image is automatically built and pushed to GitHub Container Registry (GHCR) on pushes to `main`.
 
 1. Pull the image:
    ```bash
-   docker pull ghcr.io/<your-username>/always-ok:latest
+   docker pull ghcr.io/eltifi/always-ok:latest
    ```
 2. Run the container:
    ```bash
-   docker run -d -p 80:80 ghcr.io/<your-username>/always-ok:latest
+   docker run -d -p 80:80 ghcr.io/eltifi/always-ok:latest
    ```
-
-   Replace `<your-username>` with your GitHub username.
 
 ## API
 
-- **Any Method** `/*`: Returns `200 OK` with body "OK".
+- **Any Method** `/*`: Returns `200 OK` with an empty body.
 
