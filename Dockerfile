@@ -10,16 +10,16 @@ RUN apk add --no-cache musl-dev
 COPY Cargo.toml Cargo.lock ./
 
 # Create dummy main.rs to build dependencies
-RUN mkdir -p src && echo "fn main() {}" > src/main.rs
+RUN echo "fn main() {}" > main.rs
 
 # Build release dependencies (this layer is cached)
 RUN cargo build --release
 
 # Clean up dummy build artifacts to force rebuild of main.rs
-RUN rm src/main.rs target/release/deps/always_ok*
+RUN rm main.rs target/release/deps/always_ok*
 
 # Copy actual source
-COPY src ./src
+COPY main.rs ./
 
 # Build release binary
 RUN cargo build --release
