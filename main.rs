@@ -1,7 +1,7 @@
 use std::env;
 use std::net::SocketAddr;
 
-use http_body_util::Full;
+use http_body_util::Empty;
 use hyper::body::Bytes;
 use hyper::server::conn::http1;
 use hyper::service::service_fn;
@@ -31,6 +31,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     }
 }
 
-async fn handler(_: Request<hyper::body::Incoming>) -> Result<Response<Full<Bytes>>, hyper::Error> {
-    Ok(Response::new(Full::new(Bytes::new())))
+async fn handler(
+    _: Request<hyper::body::Incoming>,
+) -> Result<Response<Empty<Bytes>>, hyper::Error> {
+    Ok(Response::new(Empty::new()))
 }
