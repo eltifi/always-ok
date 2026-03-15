@@ -33,10 +33,16 @@ WORKDIR /app
 COPY --from=builder /app/target/release/always-ok /app/always-ok
 
 # Build arguments
-ARG PORT=80
+ARG PORT=3000
 
 # Environment Defaults
 ENV PORT=${PORT}
+
+# Create a non-root user and group
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Set the user to run the application
+USER appuser
 
 # Expose port
 EXPOSE ${PORT}
