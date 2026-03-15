@@ -24,9 +24,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         let io = TokioIo::new(stream);
 
         tokio::task::spawn(async move {
-            let _ = http1::Builder::new()
+            if let Err(err) = http1::Builder::new()
                 .serve_connection(io, service_fn(handler))
-                .await;
+                .await
+            {
+                eprintln!("Error serving connection: {:?}", err);
+            }
         });
     }
 }
