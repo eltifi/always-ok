@@ -19,14 +19,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     let listener = TcpListener::bind(addr).await?;
 
+    // Instantiate the builder once outside the loop to avoid repeated object instantiation
+    let builder = http1::Builder::new();
+
     loop {
         let (stream, _) = listener.accept().await?;
         let io = TokioIo::new(stream);
+        let builder = builder.clone();
 
         tokio::task::spawn(async move {
-            let _ = http1::Builder::new()
-                .serve_connection(io, service_fn(handler))
-                .await;
+            let _ = builder.serve_connection(io, service_fn(handler)).await;
         });
     }
 }
