@@ -20,7 +20,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let listener = TcpListener::bind(addr).await?;
 
     loop {
-        let (stream, _) = listener.accept().await?;
+        let Ok((stream, _)) = listener.accept().await else {
+            continue;
+        };
         let io = TokioIo::new(stream);
 
         tokio::task::spawn(async move {
