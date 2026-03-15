@@ -31,6 +31,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     }
 }
 
-async fn handler(_: Request<hyper::body::Incoming>) -> Result<Response<Full<Bytes>>, hyper::Error> {
+async fn handler<B>(_: Request<B>) -> Result<Response<Full<Bytes>>, hyper::Error> {
     Ok(Response::new(Full::new(Bytes::new())))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use http_body_util::BodyExt;
+    use hyper::StatusCode;
+
+    #[tokio::test]
+    async fn test_handler_returns_ok_with_empty_body() {
+        let req = Request::builder()
+            .body(Full::<Bytes>::new(Bytes::new()))
+            .unwrap();
+
+        let res = handler(req).await.unwrap();
+
+        assert_eq!(res.status(), StatusCode::OK);
+
+        let body = res.into_body().collect().await.unwrap().to_bytes();
+        assert!(body.is_empty());
+    }
 }
